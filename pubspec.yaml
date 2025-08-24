@@ -52,8 +52,22 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-   - assets/icons/images/Splash_View_image.jpg
-   - assets/icons/shoppingBag.png
+    - assets/icons/images/Splash_View_image.jpg
+    - assets/icons/images/handbag.jpg
+    - assets/icons/images/heels.jpg
+    - assets/icons/images/necklace.jpg
+    - assets/icons/images/dress.jpg
+    - assets/icons/images/perfume.jpg
+    - assets/icons/images/smartwatch.jpg
+    - assets/icons/images/sunglasses.jpg
+    - assets/icons/shoppingBag.png
+  # To add assets to your application, add an assets section, like this:
+  # assets:
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg
+  #  If you have images in a subdirectory, specify the path to that
+  # directory as well:
+  #  - images/subdir/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
   # For details regarding adding assets from package dependencies, see

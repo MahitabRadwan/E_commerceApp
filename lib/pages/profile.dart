@@ -167,7 +167,7 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-Widget _orderSummaryRow(String title, String value) {
+Widget orderSummaryRow(String title, String value) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [

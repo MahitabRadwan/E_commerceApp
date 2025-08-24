@@ -1,7 +1,7 @@
-import 'package:first_project/widgets/HomeAppBar.dart' show HomeAppBar;
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../main.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,10 +20,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("ShopEase"),
-        backgroundColor: Colors.deepPurple,
-      ),
+      appBar: AppBar(title: const Text("ShopEase")),
       drawer: Drawer(
         child: FutureBuilder<String?>(
           future: _getUsername(),
@@ -53,6 +50,32 @@ class HomePage extends StatelessWidget {
                   decoration: const BoxDecoration(color: Colors.deepPurple),
                 ),
                 ListTile(
+                  leading: const Icon(Icons.home),
+                  title: const Text("Home"),
+                  onTap: () => Get.back(),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.shopping_bag),
+                  title: const Text("Products"),
+                  onTap: () => Get.toNamed('/products'),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.shopping_cart),
+                  title: const Text("Cart"),
+                  onTap: () => Get.toNamed('/cart'),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.list_alt),
+                  title: const Text("Orders"),
+                  onTap: () => Get.toNamed('/orders'),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.person),
+                  title: const Text("Profile"),
+                  onTap: () => Get.toNamed('/profile'),
+                ),
+                const Divider(),
+                ListTile(
                   leading: const Icon(Icons.logout, color: Colors.red),
                   title: const Text("Logout"),
                   onTap: () => _logout(context),
@@ -63,14 +86,94 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body: ListView(
-        children: const [
-          HomeAppBar(),
-          SizedBox(height: 20),
-          Center(
-            child: Text(
-              "Welcome to Home Page",
-              style: TextStyle(fontSize: 20, fontFamily: 'Poppins'),
+        padding: const EdgeInsets.all(16),
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.asset("assets/icons/images/Splash_View_image.jpg"),
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            "Welcome to ShopEase 💜",
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.deepPurple,
             ),
+          ),
+          const SizedBox(height: 16),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: products.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.75,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+            ),
+            itemBuilder: (context, index) {
+              final product = products[index];
+              return GestureDetector(
+                onTap: () {
+                  Get.toNamed(
+                    '/product_details',
+                    arguments: {
+                      'name': product.name,
+                      'shortDesc': product.description,
+                      'price': product.price,
+                      'image': product.image,
+                    },
+                  );
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(
+                      color: Colors.deepPurple.shade100,
+                      width: 1.5,
+                    ),
+                  ),
+                  elevation: 3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(16),
+                          ),
+                          child: Image.asset(product.image, fit: BoxFit.cover),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              product.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              "\$${product.price}",
+                              style: const TextStyle(
+                                color: Colors.deepPurple,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),

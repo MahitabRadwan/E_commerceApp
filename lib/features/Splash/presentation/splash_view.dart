@@ -11,6 +11,8 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
+  get awit => null;
+
   @override
   void initState() {
     super.initState();
@@ -18,7 +20,8 @@ class _SplashViewState extends State<SplashView> {
   }
 
   Future<void> _checkLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
+
     bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     bool hasRegistered = prefs.getBool('hasRegistered') ?? false;
 
