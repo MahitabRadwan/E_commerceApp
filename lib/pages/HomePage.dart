@@ -3,24 +3,52 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<String> favoriteProducts = [];
 
   Future<void> _logout(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', false);
-    Get.offNamed('/login');
+
+    await prefs.remove('username');
+    Get.offAllNamed('/splash');
   }
 
   Future<String?> _getUsername() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('username');
+    return prefs.getString('username') ?? "Guest";
+  }
+
+  void _toggleFavorite(String productName) {
+    setState(() {
+      if (favoriteProducts.contains(productName)) {
+        favoriteProducts.remove(productName);
+      } else {
+        favoriteProducts.add(productName);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("ShopEase")),
+      appBar: AppBar(
+        title: const Text("ShopEase"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            color: Colors.red,
+            onPressed: () => _logout(context),
+          ),
+        ],
+      ),
       drawer: Drawer(
         child: FutureBuilder<String?>(
           future: _getUsername(),
@@ -70,11 +98,39 @@ class HomePage extends StatelessWidget {
                   onTap: () => Get.toNamed('/orders'),
                 ),
                 ListTile(
+                  leading: const Icon(Icons.favorite),
+                  title: const Text("Favorites"),
+                  onTap: () {
+                    Get.to(
+                      () => Scaffold(
+                        appBar: AppBar(title: const Text("My Favorites")),
+                        body: favoriteProducts.isEmpty
+                            ? const Center(
+                                child: Text("No favorites added yet."),
+                              )
+                            : ListView.builder(
+                                itemCount: favoriteProducts.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    leading: const Icon(
+                                      Icons.favorite,
+                                      color: Colors.red,
+                                    ),
+                                    title: Text(favoriteProducts[index]),
+                                  );
+                                },
+                              ),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
                   leading: const Icon(Icons.person),
                   title: const Text("Profile"),
                   onTap: () => Get.toNamed('/profile'),
                 ),
                 const Divider(),
+
                 ListTile(
                   leading: const Icon(Icons.logout, color: Colors.red),
                   title: const Text("Logout"),
@@ -90,7 +146,7 @@ class HomePage extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: Image.asset("assets/icons/images/Splash_View_image.jpg"),
+            child: Image.asset("assets/images/Splash_View_image.jpg"),
           ),
           const SizedBox(height: 20),
           const Text(
@@ -114,17 +170,21 @@ class HomePage extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               final product = products[index];
+              final isFavorite = favoriteProducts.contains(product.name);
+
               return GestureDetector(
                 onTap: () {
-                  Get.toNamed(
-                    '/product_details',
-                    arguments: {
-                      'name': product.name,
-                      'shortDesc': product.description,
-                      'price': product.price,
-                      'image': product.image,
-                    },
-                  );
+                  if (Get.currentRoute != '/product_details') {
+                    Get.toNamed(
+                      '/product_details',
+                      arguments: {
+                        'name': product.name,
+                        'shortDesc': product.description,
+                        'price': product.price,
+                        'image': product.image,
+                      },
+                    );
+                  }
                 },
                 child: Card(
                   shape: RoundedRectangleBorder(
@@ -139,11 +199,39 @@ class HomePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(16),
-                          ),
-                          child: Image.asset(product.image, fit: BoxFit.cover),
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(16),
+                              ),
+                              child: Image.asset(
+                                product.image,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(
+                                    Icons.image_not_supported,
+                                    size: 50,
+                                  );
+                                },
+                              ),
+                            ),
+                            Positioned(
+                              right: 8,
+                              top: 8,
+                              child: IconButton(
+                                icon: Icon(
+                                  isFavorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: isFavorite ? Colors.red : Colors.grey,
+                                ),
+                                onPressed: () => _toggleFavorite(product.name),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Padding(

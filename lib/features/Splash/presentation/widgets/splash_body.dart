@@ -69,7 +69,7 @@ class _SplashBodyState extends State<SplashBody>
           ),
           const SizedBox(height: 20),
           Image.asset(
-            'assets/icons/images/Splash_View_image.jpg',
+            'assets/images/Splash_View_image.jpg',
             height: 200,
             width: 200,
           ),

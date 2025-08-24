@@ -52,15 +52,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/icons/images/Splash_View_image.jpg
-    - assets/icons/images/handbag.jpg
-    - assets/icons/images/heels.jpg
-    - assets/icons/images/necklace.jpg
-    - assets/icons/images/dress.jpg
-    - assets/icons/images/perfume.jpg
-    - assets/icons/images/smartwatch.jpg
-    - assets/icons/images/sunglasses.jpg
-    - assets/icons/shoppingBag.png
+    - assets/images/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

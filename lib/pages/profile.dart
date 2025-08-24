@@ -12,13 +12,13 @@ class ProfileScreen extends StatelessWidget {
     {
       'name': 'Handbag',
       'price': 320.00,
-      'image': 'assets/images/handbag.png',
+      'image': 'assets/images/handbag.jpg',
       'shortDesc': 'Elegant leather handbag',
     },
     {
       'name': 'Smart Watch',
       'price': 170.00,
-      'image': 'assets/images/watch.png',
+      'image': 'assets/images/smartwatch.jpg',
       'shortDesc': 'Trendy smartwatch with health tracker',
     },
   ];
@@ -100,6 +100,9 @@ class ProfileScreen extends StatelessWidget {
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(Icons.image_not_supported, size: 50);
+                      },
                     ),
                     title: Text(
                       item['name'],
