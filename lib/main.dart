@@ -1,16 +1,19 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:first_project/features/Splash/presentation/splash_view.dart';
 import 'package:first_project/pages/register_screen.dart';
 import 'package:first_project/pages/login_screen.dart';
 import 'package:first_project/pages/HomePage.dart';
-import 'package:first_project/pages/product.dart';
-import 'package:first_project/pages/productsDetails.dart';
 import 'package:first_project/pages/cart.dart';
 import 'package:first_project/pages/orders.dart';
 import 'package:first_project/pages/profile.dart';
 
-void main() => runApp(const ShopEase());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(const ShopEase());
+}
 
 class ShopEase extends StatelessWidget {
   const ShopEase({super.key});
@@ -32,7 +35,7 @@ class ShopEase extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.deepPurple,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
@@ -47,12 +50,7 @@ class ShopEase extends StatelessWidget {
         GetPage(name: '/Splash_View', page: () => const SplashView()),
         GetPage(name: '/register', page: () => const RegisterScreen()),
         GetPage(name: '/login', page: () => const LoginScreen()),
-        GetPage(name: '/home', page: () => HomePage()),
-        GetPage(name: '/products', page: () => const ProductsScreen()),
-        GetPage(
-          name: '/product_details',
-          page: () => const ProductDetailsPage(product: null),
-        ),
+        GetPage(name: '/home', page: () => const HomeScreen()),
         GetPage(name: '/cart', page: () => const CartScreen()),
         GetPage(name: '/orders', page: () => const OrdersScreen()),
         GetPage(name: '/profile', page: () => const ProfileScreen()),
